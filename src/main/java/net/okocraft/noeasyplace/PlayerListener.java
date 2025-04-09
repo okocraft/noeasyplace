@@ -3,6 +3,9 @@ package net.okocraft.noeasyplace;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -15,6 +18,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
 class PlayerListener implements Listener {
+
+    private static final Component ERROR_MESSAGE = Component.text("easyplacemodeでのブロック設置は利用できません。", NamedTextColor.RED);
 
     private final Map<UUID, BreakHistory> broken = new ConcurrentHashMap<>();
 
@@ -73,6 +78,6 @@ class PlayerListener implements Listener {
         }
 
         event.setCancelled(true);
-        event.getPlayer().sendMessage("§ceasyplacemodeでのブロック設置は利用できません。");
+        event.getPlayer().sendMessage(ERROR_MESSAGE);
     }
 }
