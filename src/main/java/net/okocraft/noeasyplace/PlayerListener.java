@@ -4,8 +4,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Candle;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -46,18 +47,24 @@ class PlayerListener implements Listener {
             return;
         }
 
-        Material placedType = event.getBlock().getType();
-        if (placedType == Material.POWDER_SNOW) {
-            return;
-        }
-
-        Material downBlockType = event.getBlock().getRelative(BlockFace.DOWN).getType();
-        if (placedType == Material.LILY_PAD && (downBlockType == Material.WATER || downBlockType == Material.ICE)) {
-            return;
-        }
-
-        if (placedType == Material.FROGSPAWN && downBlockType == Material.WATER) {
-            return;
+        switch (event.getBlock().getType()) {
+            case POWDER_SNOW -> {
+                return;
+            }
+            case LILY_PAD -> {
+                Block downBlock = event.getBlock().getRelative(BlockFace.DOWN);
+                if (downBlock.getType() == Material.WATER || downBlock.getType() == Material.ICE) {
+                    return;
+                } else if (downBlock.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()) {
+                    return;
+                }
+            }
+            case FROGSPAWN -> {
+                Block downBlock = event.getBlock().getRelative(BlockFace.DOWN);
+                if (downBlock.getType() == Material.WATER) {
+                    return;
+                }
+            }
         }
 
         BreakHistory bh = broken.get(event.getPlayer().getUniqueId());
