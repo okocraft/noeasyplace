@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:26.2.build.100-stable")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.103-stable")
 }
 
 tasks.compileJava {
